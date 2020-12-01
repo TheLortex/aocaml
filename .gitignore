@@ -1,0 +1,5 @@
+node_modules
+.vscode
+_build
+.merlin
+input
