@@ -1,5 +1,5 @@
 let is_valid p1 p2 letter word =
-  (word.[p1-1] == letter) <> (word.[p2-1] == letter)
+  word.[p1 - 1] == letter <> (word.[p2 - 1] == letter)
 
 let rec main total =
   match Scanf.scanf "%d-%d %c: %s\n" is_valid with

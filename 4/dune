@@ -1,0 +1,8 @@
+(executable
+ (name part_one)
+ (modules part_one))
+
+(executable
+ (name part_two)
+ (libraries str)
+ (modules part_two))
