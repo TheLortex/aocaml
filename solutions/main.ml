@@ -1,4 +1,4 @@
-let usage = "AOC: Advent of Code helper."
+let usage = "AOC: Advent of Code helper"
 
 let last = ref false
 

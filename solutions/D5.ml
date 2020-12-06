@@ -1,5 +1,4 @@
 include Aoc.Misc.DefaultIntSolution
-module StringMap = Map.Make (String)
 
 let day = 5
 
@@ -12,8 +11,6 @@ let parse_input input =
     | str -> aux (str :: value)
   in
   aux []
-
-(* *)
 
 let value_of pass =
   let rec aux value = function
