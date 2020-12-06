@@ -1,0 +1,3 @@
+(library
+ (name aoc)
+ (libraries fmt fpath bos cohttp cohttp-lwt-unix logs logs.fmt mtime mtime.clock.os))

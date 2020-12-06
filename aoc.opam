@@ -1,0 +1,14 @@
+opam-version: "2.0"
+name: "aoc"
+version: "0.1"
+synopsis: "Advent of code helper and solutions"
+description: """"""
+maintainer: "Lucas Pluvinage <lucas.pluvinage@gmail.com>"
+authors: "Lucas Pluvinage <lucas.pluvinage@gmail.com>"
+license: "MT"
+homepage: ""
+bug-reports: ""
+dev-repo: ""
+depends: [ "ocaml" "dune" "fmt" "bos" "fpath" "cohttp" "cohttp-lwt-unix" "logs" "mtime" ]
+build: []
+install: []
