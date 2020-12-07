@@ -1,5 +1,4 @@
 include Aoc.Misc.DefaultIntSolution
-module CharSet = Set.Make (Char)
 
 let day = 6
 
@@ -16,16 +15,33 @@ let parse_input input =
   in
   aux [] []
 
+let a = Char.code 'a'
+
+let z = Char.code 'z'
+
 let n_any_questions_group group =
-  group |> String.concat "" |> String.to_seq |> CharSet.of_seq
-  |> CharSet.cardinal
+  let res = Array.make Char.(z - a + 1) 0 in
+  let () =
+    group |> String.concat ""
+    |> String.iter (fun letter ->
+           res.(Char.code letter - a) <- res.(Char.code letter - a) + 1)
+  in
+  Array.fold_left (fun i v -> if v > 0 then i + 1 else i) 0 res
 
 let part_1 t = t |> List.map n_any_questions_group |> List.fold_left ( + ) 0
 
 let n_every_questions_group group =
-  group |> String.concat "" |> String.to_seq |> CharSet.of_seq
-  |> CharSet.filter (fun c -> List.for_all (fun s -> String.contains s c) group)
-  |> CharSet.cardinal
+  let res = Array.make Char.(z - a + 1) 0 in
+  let n_person = List.length group in
+  let () =
+    group
+    |> List.iter (fun str ->
+           String.iter
+             (fun letter ->
+               res.(Char.code letter - a) <- res.(Char.code letter - a) + 1)
+             str)
+  in
+  Array.fold_left (fun i v -> if v = n_person then i + 1 else i) 0 res
 
 let part_2 t = t |> List.map n_every_questions_group |> List.fold_left ( + ) 0
 

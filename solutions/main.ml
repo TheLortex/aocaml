@@ -17,7 +17,13 @@ let year = 2020
 
 let days : (module Aoc.Solution) list =
   [
-    (module D1); (module D2); (module D3); (module D4); (module D5); (module D6);
+    (module D1);
+    (module D2);
+    (module D3);
+    (module D4);
+    (module D5);
+    (module D6);
+    (module D7);
   ]
 
 let rec get_last = function

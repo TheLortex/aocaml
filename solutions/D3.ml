@@ -11,9 +11,8 @@ type slope = { dx : int; dy : int }
 type t = { dimensions : dimensions; map : string array }
 
 let parse_input input =
-  let input = Scanf.Scanning.from_channel input in
   let rec map array =
-    match Scanf.bscanf input "%s\n" (fun x -> x) with
+    match input_line input with
     | line -> map (line :: array)
     | exception End_of_file -> List.rev array
   in

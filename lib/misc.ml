@@ -60,7 +60,7 @@ let pp_float_s ppf span =
     if d = 0 then Format.fprintf ppf "%da" y
     else Format.fprintf ppf "%da%dd" y (abs d)
 
-let pp_span ppf s = pp_float_s ppf (to_s s)
+let pp_span ?(factor = 1.) ppf s = pp_float_s ppf (to_s s /. factor)
 
 module DefaultIntSolution = struct
   type solution = int

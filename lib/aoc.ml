@@ -38,16 +38,28 @@ let ensuredir path =
 
 let max a b = if a < b then b else a
 
-let print_timings ~name ?pp_output f =
+let print_timings ?(bench = 1) ~name ?pp_output f =
   let t0 = Mtime_clock.now () in
-  let res = f () in
+  let res =
+    for i = 1 to bench - 1 do
+      f ()
+    done;
+    f ()
+  in
   let t1 = Mtime_clock.now () in
   let elapsed = Mtime.span t0 t1 in
-  let text = Fmt.str " ⇒ %s \x1B[90m(%a)\x1B[0m" name Misc.pp_span elapsed in
-  let dots = String.make (max 0 (40 - String.length text)) '.' in
+  let text =
+    Fmt.str " ⇒ %s \x1B[90m(%a)\x1B[0m" name
+      (Misc.pp_span ~factor:(Float.of_int bench))
+      elapsed
+  in
+  let length =
+    Uuseg_string.fold_utf_8 `Grapheme_cluster (fun x _ -> x + 1) 0 text
+  in
+  let dots = String.make (max 0 (40 - length)) '.' in
   let () =
     match pp_output with
-    | Some pp -> Fmt.pr "%s %s %a\n" text dots pp res
+    | Some pp -> Fmt.pr "%s %s \x1B[1m%a\x1B[0m\n" text dots pp res
     | None -> Fmt.pr "%s\n" text
   in
   res
@@ -112,7 +124,7 @@ module Storage = struct
 end
 
 let solve ~input ~name solver pp =
-  print_timings ~name ~pp_output:pp (fun () -> solver input)
+  print_timings ~bench:20 ~name ~pp_output:pp (fun () -> solver input)
 
 let execute_result ~stdin ~year (module S : Solution) =
   Fmt.pr "⁙ Day %s\n" (S.day |> string_of_int |> C.green |> C.bold);

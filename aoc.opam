@@ -9,6 +9,6 @@ license: "MT"
 homepage: ""
 bug-reports: ""
 dev-repo: ""
-depends: [ "ocaml" "dune" "fmt" "bos" "fpath" "cohttp" "cohttp-lwt-unix" "logs" "mtime" ]
+depends: [ "ocaml" "uuseg" "dune" "fmt" "bos" "fpath" "cohttp" "cohttp-lwt-unix" "logs" "mtime" ]
 build: []
 install: []

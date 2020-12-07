@@ -1,4 +1,7 @@
 (lang dune 2.0)
 (profile release)
 
- 
+(env 
+ (release 
+  (env-vars (OCAML_SPACETIME_INTERVAL 100)))
+  )

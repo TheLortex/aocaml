@@ -1,4 +1,4 @@
-val pp_span : Mtime.Span.t Fmt.t
+val pp_span : ?factor:float -> Mtime.Span.t Fmt.t
 
 module DefaultIntSolution : sig
   type solution = int
