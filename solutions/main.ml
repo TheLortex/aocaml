@@ -24,6 +24,7 @@ let days : (module Aoc.Solution) list =
     (module D5);
     (module D6);
     (module D7);
+    (module D8);
   ]
 
 let rec get_last = function
