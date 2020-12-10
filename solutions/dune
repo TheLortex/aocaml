@@ -1,6 +1,6 @@
 (executable
  (name main)
- (libraries aoc fmt str))
+ (libraries aoc fmt str containers iter))
 
 (menhir
  (modules D7_parser))

@@ -124,7 +124,7 @@ module Storage = struct
 end
 
 let solve ~input ~name solver pp =
-  print_timings ~bench:20 ~name ~pp_output:pp (fun () -> solver input)
+  print_timings ~bench:1 ~name ~pp_output:pp (fun () -> solver input)
 
 let execute_result ~stdin ~year (module S : Solution) =
   Fmt.pr "⁙ Day %s\n" (S.day |> string_of_int |> C.green |> C.bold);
