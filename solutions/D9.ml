@@ -33,16 +33,16 @@ let part_1 t =
   let values = ref initial_values in
   let t = Seq.to_array t in
   match
-    for e = preamble_size to Array.length t - 1 do 
+    for e = preamble_size to Array.length t - 1 do
       let target = t.(e) in
       let b = e - preamble_size in
-      if Iter.(b -- e |> exists (fun i -> IntSet.mem (target - t.(i)) !values)) then 
-        (values := IntSet.remove t.(b) !values;
-        values := IntSet.add t.(e) !values;)
-      else
-        raise (Found t.(e))
+      if Iter.(b -- e |> exists (fun i -> IntSet.mem (target - t.(i)) !values))
+      then (
+        values := IntSet.remove t.(b) !values;
+        values := IntSet.add t.(e) !values)
+      else raise (Found t.(e))
     done
-  with 
+  with
   | exception Found e -> e
   | _ -> failwith "not found"
 

@@ -60,22 +60,22 @@ let part_1_occupied_to_empty t i j = count_occupied_cells_neighbors t i j >= 4
 
 let part_1_empty_to_occupied t i j = count_occupied_cells_neighbors t i j = 0
 
-let count_occupied_cells_line_of_sight t i j = 
-  let rec raytrace di dj i j = 
-    match get ~default:Empty t (di+i) (dj+j) with 
+let count_occupied_cells_line_of_sight t i j =
+  let rec raytrace di dj i j =
+    match get ~default:Empty t (di + i) (dj + j) with
     | Occupied -> Occupied
-    | Floor -> raytrace di dj (i+di) (j+dj)
+    | Floor -> raytrace di dj (i + di) (j + dj)
     | Empty -> Empty
   in
-  directions 
-  |> Iter.map (fun (di,dj) -> raytrace di dj i j)
-  |> Iter.filter_count (function 
-    | Occupied -> true
-    | _ -> false) 
+  directions
+  |> Iter.map (fun (di, dj) -> raytrace di dj i j)
+  |> Iter.filter_count (function Occupied -> true | _ -> false)
 
-let part_2_occupied_to_empty t i j = count_occupied_cells_line_of_sight t i j >= 5
+let part_2_occupied_to_empty t i j =
+  count_occupied_cells_line_of_sight t i j >= 5
 
-let part_2_empty_to_occupied t i j = count_occupied_cells_line_of_sight t i j = 0
+let part_2_empty_to_occupied t i j =
+  count_occupied_cells_line_of_sight t i j = 0
 
 let state ~occupied_to_empty ~empty_to_occupied ~change t c i j =
   match c with
@@ -105,10 +105,8 @@ let get_next ~occupied_to_empty ~empty_to_occupied t =
 let part_1 t =
   let rec exec t =
     match
-      get_next 
-        ~occupied_to_empty:part_1_occupied_to_empty
-        ~empty_to_occupied:part_1_empty_to_occupied 
-        t
+      get_next ~occupied_to_empty:part_1_occupied_to_empty
+        ~empty_to_occupied:part_1_empty_to_occupied t
     with
     | false, next -> next
     | true, next -> exec next
@@ -121,10 +119,9 @@ let part_1 t =
 
 let part_2 t =
   let rec exec t =
-    match get_next 
-      ~occupied_to_empty:part_2_occupied_to_empty
-      ~empty_to_occupied:part_2_empty_to_occupied 
-      t 
+    match
+      get_next ~occupied_to_empty:part_2_occupied_to_empty
+        ~empty_to_occupied:part_2_empty_to_occupied t
     with
     | false, next -> next
     | true, next -> exec next

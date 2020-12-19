@@ -3,6 +3,7 @@
  (libraries aoc fmt str containers iter))
 
 (menhir
+ (flags --explain)
  (modules D7_parser))
 
 (ocamllex D7_lexer)
