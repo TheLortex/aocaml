@@ -1,34 +1,23 @@
 let ( let* ) = Rresult.( >>= )
-
 let ( let+ ) = Rresult.( >>| )
 
 module type Solution = sig
   type t
-
   type key
-
   type solution
 
   val pp_key : key -> string
-
   val keys : key list
-
   val day : int
-
-  val parse_input : in_channel -> t
-
+  val parse_input : Eio.Buf_read.t -> t
   val eval : key -> t -> solution
-
   val format : solution Fmt.t
 end
 
 module C = struct
   let orange str = "\x1B[33m" ^ str ^ "\x1B[0m"
-
   let red str = "\x1B[31m" ^ str ^ "\x1B[0m"
-
   let green str = "\x1B[32m" ^ str ^ "\x1B[0m"
-
   let bold str = "\x1B[1m" ^ str ^ "\x1B[0m"
 end
 
@@ -66,7 +55,6 @@ let print_timings ?(bench = 1) ~name ?pp_output f =
 
 module Storage = struct
   let root = "./data/"
-
   let base_url = "https://adventofcode.com"
 
   let prompt_token ~file () =
@@ -114,25 +102,29 @@ module Storage = struct
     let* _ = ensuredir file in
     Bos.OS.File.write file input
 
-  let get_input ~year ~day () =
+  let get_input ~sw ~fs ~year ~day () =
     let fname =
       Fpath.(v root / "input" / string_of_int year / string_of_int day)
     in
     let* exists = Bos.OS.Path.exists fname in
     let+ () = if exists then Ok () else fetch_input ~year ~day ~file:fname () in
-    open_in (Fpath.to_string fname)
+    let p = Eio.Path.(fs / Fpath.to_string fname) in
+    (Eio.Path.open_in ~sw p :> Eio.Flow.source)
 end
 
 let solve ~input ~name solver pp =
   print_timings ~bench:1 ~name ~pp_output:pp (fun () -> solver input)
 
-let execute_result ~stdin ~year (module S : Solution) =
+let execute_result ~(stdenv : Eio.Stdenv.t) ~stdin ~year (module S : Solution) =
   Fmt.pr "⁙ Day %s\n" (S.day |> string_of_int |> C.green |> C.bold);
+  let fs = Eio.Stdenv.cwd stdenv in
+  Eio.Switch.run @@ fun sw ->
   let+ input =
     match stdin with
-    | false -> Storage.get_input ~year ~day:S.day ()
-    | true -> Ok Stdlib.stdin
+    | false -> Storage.get_input ~sw ~fs ~year ~day:S.day ()
+    | true -> Ok (Eio.Stdenv.stdin stdenv)
   in
+  let input = Eio.Buf_read.of_flow input ~max_size:16000 in
   let parsed_input =
     print_timings ~name:"read input" (fun () -> S.parse_input input)
   in
@@ -141,19 +133,18 @@ let execute_result ~stdin ~year (module S : Solution) =
          solve ~name:(S.pp_key x) ~input:parsed_input (S.eval x) S.format
          |> ignore)
 
-let execute ~stdin ~year (module S : Solution) =
-  match execute_result ~stdin ~year (module S) with
+let execute ~stdenv ~stdin ~year (module S : Solution) =
+  match execute_result ~stdenv ~stdin ~year (module S) with
   | Ok () -> Fmt.pr "\n"
   | Error (`Msg str) -> Fmt.pr "%s\n" str
 
-let main ?(stdin = false) ~year modules =
-  Fmt.pr "\n%s\n\n%!"
-    (C.green (C.bold " ⁘⁙⁘⁙⁘ Advent of Code! ⁘⁙⁘⁙⁘"));
+let main ~stdenv ?(stdin = false) ~year modules =
+  Fmt.pr "\n%s\n\n%!" (C.green (C.bold " ⁘⁙⁘⁙⁘ Advent of Code! ⁘⁙⁘⁙⁘"));
   let _ =
     modules
     |> List.sort (fun (module S1 : Solution) (module S2 : Solution) ->
            S1.day - S2.day)
-    |> List.map (execute ~stdin ~year)
+    |> List.map (execute ~stdenv ~stdin ~year)
   in
   ()
 

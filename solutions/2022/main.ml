@@ -1,7 +1,5 @@
 let usage = "AOC: Advent of Code helper"
-
 let last = ref false
-
 let stdin = ref false
 
 let args =
@@ -14,7 +12,6 @@ let args =
     usage
 
 let year = 2022
-
 let days : (module Aoc.Solution) list = [ (module D1) ]
 
 let rec get_last = function
@@ -23,8 +20,9 @@ let rec get_last = function
   | [] -> failwith "Empty list."
 
 let () =
+  Eio_main.run @@ fun stdenv ->
   match (!last, !stdin) with
-  | false, false -> Aoc.main ~year days
-  | true, false -> Aoc.main ~year [ get_last days ]
-  | true, true -> Aoc.main ~stdin:true ~year [ get_last days ]
+  | false, false -> Aoc.main ~stdenv ~year days
+  | true, false -> Aoc.main ~stdenv ~year [ get_last days ]
+  | true, true -> Aoc.main ~stdenv ~stdin:true ~year [ get_last days ]
   | false, true -> failwith "Cannot use stdin when executing all days."
