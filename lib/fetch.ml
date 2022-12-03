@@ -6,6 +6,10 @@ let api_request ~url ~token () =
   Logs.info ~src (fun fmt -> fmt "Performing request: %s" url);
   let body =
     let headers = Cohttp.Header.init_with "Cookie" ("session=" ^ token) in
+    let headers =
+      Cohttp.Header.add headers "User-Agent"
+        "github.com/TheLortex/aocaml by lucas@pluvina.ge"
+    in
     let open Lwt.Infix in
     Cohttp_lwt_unix.Client.get (Uri.of_string url) ~headers
     >>= fun (resp, body) ->
