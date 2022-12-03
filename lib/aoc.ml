@@ -38,7 +38,7 @@ let execute_result ~(stdenv : Eio.Stdenv.t) ~stdin ~year (module S : Solution) =
 let execute ~stdenv ~stdin ~year (module S : Solution) =
   match execute_result ~stdenv ~stdin ~year (module S) with
   | Ok () -> Fmt.pr "\n"
-  | Error (`Msg str) -> Fmt.pr "%s\n" str
+  | Error (`Msg str) -> Fmt.pr "Error: %s\n" str
 
 let main ~stdenv ?(stdin = false) ~year modules =
   Fmt.pr "\n%s\n\n%!" (C.green (C.bold " ⁘⁙⁘⁙⁘ Advent of Code! ⁘⁙⁘⁙⁘"));
