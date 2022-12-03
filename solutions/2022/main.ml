@@ -22,9 +22,12 @@ let rec get_last = function
   | [] -> failwith "Empty list."
 
 let () =
-  Eio_main.run @@ fun stdenv ->
+  Logs.set_level (Some Info);
+  Logs.set_reporter (Logs_fmt.reporter ());
+  Eio_main.run @@ fun env ->
+  Mirage_crypto_rng_eio.run (module Mirage_crypto_rng.Fortuna) env @@ fun () ->
   match (!last, !stdin) with
-  | false, false -> Aoc.main ~stdenv ~year days
-  | true, false -> Aoc.main ~stdenv ~year [ get_last days ]
-  | true, true -> Aoc.main ~stdenv ~stdin:true ~year [ get_last days ]
+  | false, false -> Aoc.main ~env ~year days
+  | true, false -> Aoc.main ~env ~year [ get_last days ]
+  | true, true -> Aoc.main ~env ~stdin:true ~year [ get_last days ]
   | false, true -> failwith "Cannot use stdin when executing all days."

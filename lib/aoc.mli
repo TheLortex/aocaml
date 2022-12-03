@@ -14,8 +14,4 @@ end
 module Misc = Misc
 
 val main :
-  stdenv:Eio.Stdenv.t ->
-  ?stdin:bool ->
-  year:int ->
-  (module Solution) list ->
-  unit
+  env:Eio.Stdenv.t -> ?stdin:bool -> year:int -> (module Solution) list -> unit

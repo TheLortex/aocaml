@@ -1,27 +1,45 @@
+let ( let* ) = Rresult.( >>= )
+
 exception HTTP_Error of int
 
 let src = Logs.Src.create "aoc.fetch"
 
-let api_request ~url ~token () =
-  Logs.info ~src (fun fmt -> fmt "Performing request: %s" url);
-  let body =
-    let headers = Cohttp.Header.init_with "Cookie" ("session=" ^ token) in
-    let headers =
-      Cohttp.Header.add headers "User-Agent"
-        "github.com/TheLortex/aocaml by lucas@pluvina.ge"
-    in
-    let open Lwt.Infix in
-    Cohttp_lwt_unix.Client.get (Uri.of_string url) ~headers
-    >>= fun (resp, body) ->
-    let code = resp |> Cohttp.Response.status |> Cohttp.Code.code_of_status in
-    match code with
-    | 200 -> body |> Cohttp_lwt.Body.to_string
-    | i -> Lwt.fail (HTTP_Error i)
+let headers ~token =
+  Http.Header.of_list
+    [
+      ("Cookie", "session=" ^ token);
+      ("User-Agent", "github.com/TheLortex/aocaml by lucas@pluvina.ge");
+    ]
+
+let authenticator fs =
+  X509_eio.authenticator (`Ca_dir Eio.Path.(fs / "/etc" / "ssl" / "certs"))
+
+let get ~net ~fs ~uri ~token =
+  let tls_config = Tls.Config.client ~authenticator:(authenticator fs) () in
+  let headers = headers ~token in
+  Logs.info ~src (fun fmt -> fmt "Performing request: %a" Uri.pp uri);
+  let host = Uri.host uri |> Option.get in
+  Logs.info (fun f -> f "||%s %s" host (Uri.path_and_query uri));
+  Eio.Net.with_tcp_connect ~host ~service:(Uri.scheme uri |> Option.get) net
+  @@ fun conn ->
+  Logs.info (fun f -> f "TCP connected");
+  let conn =
+    Tls_eio.client_of_flow
+      ~host:(Domain_name.of_string_exn host |> Domain_name.host_exn)
+      tls_config conn
   in
-  let execute () =
-    match Lwt_main.run body with
-    | body -> Ok body
-    | exception HTTP_Error 500 ->
-        Error (`Msg (C.red "Error 500" ^ ": failed to fetch input."))
+  Logs.info (fun f -> f "TLS connected");
+  let http_response, reader =
+    Cohttp_eio.Client.get ~headers ~conn (host, None) (Uri.path_and_query uri)
   in
-  Bench.print_timings ~name:"fetch input" execute
+  match Http.Response.status http_response with
+  | `OK ->
+      Eio.Flow.shutdown conn `Send;
+      Logs.info (fun f -> f "OK");
+      let res = Cohttp_eio.Client.read_fixed (http_response, reader) in
+      Logs.info (fun f -> f "S: %s" res);
+      Logs.info (fun f -> f "Closed");
+      Ok res
+  | t ->
+      Logs.info (fun f -> f "Err");
+      Error (`Msg ("Error " ^ Http.Status.to_string t))
