@@ -1,13 +1,13 @@
 
 all:
-	@dune exec --profile release -- ./solutions/2021/main.exe
+	@dune exec --profile release -- ./solutions/2022/main.exe
 
-last: 
-	@dune exec -- ./solutions/2021/main.exe --last
+last:
+	@dune exec -- ./solutions/2022/main.exe --last
 
 stdin:
-	@dune exec -- ./solutions/2021/main.exe --last --stdin
+	@dune exec -- ./solutions/2022/main.exe --last --stdin
 
-fmt: 
+fmt:
 	dune build @fmt
 	dune promote

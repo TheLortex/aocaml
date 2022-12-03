@@ -12,7 +12,9 @@ let args =
     usage
 
 let year = 2022
-let days : (module Aoc.Solution) list = [ (module D1) ]
+
+let days : (module Aoc.Solution) list =
+  [ (module D1); (module D2); (module D3) ]
 
 let rec get_last = function
   | [ x ] -> x
