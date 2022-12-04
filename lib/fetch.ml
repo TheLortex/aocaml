@@ -14,8 +14,7 @@ let headers ~token =
 let authenticator fs =
   X509_eio.authenticator (`Ca_dir Eio.Path.(fs / "/etc" / "ssl" / "certs"))
 
-let get ~net ~fs ~uri ~token =
-  let tls_config = Tls.Config.client ~authenticator:(authenticator fs) () in
+let get ~net ~tls ~uri ~token =
   let headers = headers ~token in
   Logs.info ~src (fun fmt -> fmt "Performing request: %a" Uri.pp uri);
   let host = Uri.host uri |> Option.get in
@@ -23,11 +22,7 @@ let get ~net ~fs ~uri ~token =
   Eio.Net.with_tcp_connect ~host ~service:(Uri.scheme uri |> Option.get) net
   @@ fun conn ->
   Logs.info (fun f -> f "TCP connected");
-  let conn =
-    Tls_eio.client_of_flow
-      ~host:(Domain_name.of_string_exn host |> Domain_name.host_exn)
-      tls_config conn
-  in
+  let conn = Eztls.client_of_flow tls ~host conn in
   Logs.info (fun f -> f "TLS connected");
   let http_response, reader =
     Cohttp_eio.Client.get ~headers ~conn (host, None) (Uri.path_and_query uri)

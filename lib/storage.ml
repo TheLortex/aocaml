@@ -34,10 +34,10 @@ exception HTTP_Error of int
 
 let src = Logs.Src.create "aoc"
 
-let fetch_input ~fs ~data ~net ~year ~day ~file () =
+let fetch_input ~tls ~data ~net ~year ~day ~file () =
   let uri = Uri.with_path base_uri (Fmt.str "%d/day/%d/input" year day) in
   let token = get_token ~data in
-  let+ input = Fetch.get ~fs ~net ~uri ~token in
+  let+ input = Fetch.get ~tls ~net ~uri ~token in
   ensuredir file;
   Eio.Path.save ~create:(`Exclusive 0o600) file input
 
@@ -49,6 +49,6 @@ let get_input ~env ~sw ~year ~day () =
   let exists = exists fname in
   let+ () =
     if exists then Ok ()
-    else fetch_input ~fs:env#fs ~data ~net:env#net ~year ~day ~file:fname ()
+    else fetch_input ~tls:env#tls ~data ~net:env#net ~year ~day ~file:fname ()
   in
   (Eio.Path.open_in ~sw fname :> Eio.Flow.source)

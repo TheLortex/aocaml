@@ -13,5 +13,4 @@ end
 
 module Misc = Misc
 
-val main :
-  env:Eio.Stdenv.t -> ?stdin:bool -> year:int -> (module Solution) list -> unit
+val main : year:int -> (module Solution) list -> unit

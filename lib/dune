@@ -12,4 +12,6 @@
   eio
   cohttp-eio
   tls-eio
-  uri))
+  uri
+  mirage-crypto-rng-eio
+  eio_main))
