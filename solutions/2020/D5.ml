@@ -22,7 +22,6 @@ let value_of pass =
   aux 0 0
 
 let max = List.fold_left (fun cur value -> if cur > value then cur else value) 0
-
 let part_1 t = t |> List.map value_of |> max
 
 let part_2 t =

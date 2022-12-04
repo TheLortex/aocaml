@@ -16,7 +16,6 @@ end
 let day = 17
 
 type cell = On | Off
-
 type t = cell Iter.t Iter.t
 
 let parse_cell = function '.' -> Off | '#' -> On | _ -> failwith "unk"

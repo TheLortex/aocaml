@@ -5,9 +5,7 @@ module IntSet = Set.Make (Int)
 let day = 12
 
 type kind = N | S | E | W | L | R | F
-
 type action = kind * int
-
 type t = action Iter.t
 
 (* INPUT *)

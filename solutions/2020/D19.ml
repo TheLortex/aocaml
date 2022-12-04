@@ -11,7 +11,6 @@ type rule_node =
   | Nop
 
 type t = { rules : rule_node; entries : string Iter.t }
-
 type rule_non_resolved = NOr of int Iter.t Iter.t | NChar of char
 
 let parse_rules rules =

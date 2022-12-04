@@ -1,17 +1,4 @@
 (library
  (name aoc)
- (libraries
-  fmt
-  fpath
-  bos
-  logs
-  logs.fmt
-  mtime
-  mtime.clock.os
-  uuseg.string
-  eio
-  cohttp-eio
-  tls-eio
-  uri
-  mirage-crypto-rng-eio
-  eio_main))
+ (libraries fmt fpath bos logs logs.fmt mtime mtime.clock.os uuseg.string eio
+   cohttp-eio tls-eio uri mirage-crypto-rng-eio eio_main))

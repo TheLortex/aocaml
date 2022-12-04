@@ -27,7 +27,6 @@ let part_1 input =
 type window = int * int * int
 
 let sum (v1, v2, v3) = v1 + v2 + v3
-
 let add v (_, v2, v3) = (v2, v3, v)
 
 let part_2 input =
@@ -40,8 +39,8 @@ let part_2 input =
     Iter.fold
       (fun (window, count) value ->
         let next_window = add value window in
-        if Int.compare (sum next_window) (sum window) > 0 then (
-          (next_window, count + 1))
+        if Int.compare (sum next_window) (sum window) > 0 then
+          (next_window, count + 1)
         else (next_window, count))
       (init_window, 0) (Iter.drop 3 input)
   in

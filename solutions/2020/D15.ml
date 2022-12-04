@@ -28,5 +28,4 @@ let part_1 = doit ~n:2020
 
 (* Original value: 30000000 *)
 let part_2 = doit ~n:3000
-
 let eval = function P1 -> part_1 | P2 -> part_2

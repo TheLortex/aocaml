@@ -47,7 +47,6 @@ let part_1 t =
   | _ -> failwith "not found"
 
 let max = Array.fold_left max min_int
-
 let min = Array.fold_left min max_int
 
 let part_2 t =

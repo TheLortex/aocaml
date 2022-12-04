@@ -61,5 +61,4 @@ let rec count_bags t =
       rules 0
 
 let part_2 t = count_bags t "shiny-gold" - 1
-
 let eval = function P1 -> part_1 | P2 -> part_2

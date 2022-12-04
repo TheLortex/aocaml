@@ -5,7 +5,6 @@ module StringSet = Set.Make (String)
 let day = 16
 
 type ticket = int Iter.t
-
 type rule = { name : string; range_1 : int * int; range_2 : int * int }
 
 type t = {
@@ -137,5 +136,4 @@ let part_2 t =
   |> Iter.fold ( * ) 1
 
 let part_2_disabled _ = 0
-
 let eval = function P1 -> part_1 | P2 -> part_2_disabled

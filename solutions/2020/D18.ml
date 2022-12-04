@@ -17,9 +17,7 @@ let parse_input input =
 open Angstrom
 
 let parens p = char '(' *> p <* char ')'
-
 let add = char '+' *> return ( + )
-
 let mul = char '*' *> return ( * )
 
 let integer =

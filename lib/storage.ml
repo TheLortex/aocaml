@@ -58,6 +58,7 @@ let get_input ~env ~sw ~year ~day target =
   let fname = file ~data ~year ~day target in
   let exists = exists fname in
   let+ () =
-    if exists then Ok () else fetch_input ~env ~data ~year ~day ~file:fname target
+    if exists then Ok ()
+    else fetch_input ~env ~data ~year ~day ~file:fname target
   in
   (Eio.Path.open_in ~sw fname :> Eio.Flow.source)

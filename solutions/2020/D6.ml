@@ -3,7 +3,6 @@ include Aoc.Misc.DefaultIntSolution
 let day = 6
 
 type group = string list
-
 type t = group list
 
 let parse_input input =
@@ -16,7 +15,6 @@ let parse_input input =
   aux [] []
 
 let a = Char.code 'a'
-
 let z = Char.code 'z'
 
 let n_any_questions_group group =
@@ -44,5 +42,4 @@ let n_every_questions_group group =
   Array.fold_left (fun i v -> if v = n_person then i + 1 else i) 0 res
 
 let part_2 t = t |> List.map n_every_questions_group |> List.fold_left ( + ) 0
-
 let eval = function P1 -> part_1 | P2 -> part_2

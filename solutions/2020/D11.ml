@@ -57,7 +57,6 @@ let count_occupied_cells_neighbors t i j =
   neighbors i j |> Iter.filter_count (fun (i, j) -> is_cell_occupied i j)
 
 let part_1_occupied_to_empty t i j = count_occupied_cells_neighbors t i j >= 4
-
 let part_1_empty_to_occupied t i j = count_occupied_cells_neighbors t i j = 0
 
 let count_occupied_cells_line_of_sight t i j =

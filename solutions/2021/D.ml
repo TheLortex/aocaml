@@ -16,7 +16,5 @@ let parse_input input =
   Iter.of_gen scan
 
 let part_1 t = 0
-
 let part_2 t = 0
-
 let eval = function P1 -> part_1 | P2 -> part_2

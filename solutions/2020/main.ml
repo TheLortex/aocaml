@@ -1,7 +1,5 @@
 let usage = "AOC: Advent of Code helper"
-
 let last = ref false
-
 let stdin = ref false
 
 let args =

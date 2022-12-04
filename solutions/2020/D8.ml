@@ -5,9 +5,7 @@ module StringSet = Set.Make (String)
 let day = 8
 
 type op = Nop | Acc | Jmp
-
 type instruction = op * int
-
 type t = instruction array
 
 (* INPUT *)
@@ -30,7 +28,6 @@ let parse_input input =
 (* SOLVING *)
 
 type status = Instr of instruction | Visited
-
 type execution_result = Loop of int | Terminated of int
 
 let rec execute t ip acc =

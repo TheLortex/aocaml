@@ -3,7 +3,6 @@ include Aoc.Misc.DefaultIntSolution
 let day = 2
 
 type password = { min : int; max : int; letter : char; word : string }
-
 type t = password list
 
 let parse_input input =

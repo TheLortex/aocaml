@@ -5,13 +5,9 @@ module IntSet = Set.Make (Int)
 let day = 14
 
 type maskbit = X | V0 | V1
-
 type mask = maskbit array
-
 type addr = int
-
 type instr = Mask of mask | Set of addr * int
-
 type t = instr Iter.t
 
 (* INPUT *)
@@ -71,7 +67,6 @@ let part_1 t =
   Hashtbl.fold (fun _ v it -> it + v) memory 0
 
 let bitsel i = 1 lsl (35 - i) (* 0 = MSB; 35 = LSB *)
-
 let get_bit value i = value land bitsel i <> 0
 
 let part_2 t =

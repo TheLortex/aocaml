@@ -3,11 +3,8 @@ include Aoc.Misc.DefaultIntSolution
 let day = 3
 
 type dimensions = { width : int; height : int }
-
 type position = { x : int; y : int }
-
 type slope = { dx : int; dy : int }
-
 type t = { dimensions : dimensions; map : string array }
 
 let parse_input input =

@@ -1,7 +1,5 @@
 let usage = "AOC: Advent of Code helper"
-
 let last = ref false
-
 let stdin = ref false
 
 let args =
@@ -14,7 +12,6 @@ let args =
     usage
 
 let year = 2022
-
 let days : (module Aoc.Solution) list = [ (module D1) ]
 
 let rec get_last = function

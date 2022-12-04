@@ -36,11 +36,11 @@ let q m b =
   assert (r = 1);
   u
 
-(* 
- t = t0 % a
- t = t1 % b
- t = t2 % c
- ...
+(*
+   t = t0 % a
+   t = t1 % b
+   t = t2 % c
+   ...
 *)
 let part_2 t =
   let bus_offset =
