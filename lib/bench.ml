@@ -1,6 +1,6 @@
 let max a b = if a < b then b else a
 
-let print_timings ?(bench = 1) ~name ?pp_output f =
+let print_timings ?(ofs = 1) ?(bench = 1) ~name ?pp_output f =
   let t0 = Mtime_clock.now () in
   let res =
     for i = 1 to bench - 1 do
@@ -11,7 +11,7 @@ let print_timings ?(bench = 1) ~name ?pp_output f =
   let t1 = Mtime_clock.now () in
   let elapsed = Mtime.span t0 t1 in
   let text =
-    Fmt.str " ⇒ %s \x1B[90m(%a)\x1B[0m" name
+    Fmt.str "%s⇒ %s \x1B[90m(%a)\x1B[0m" (String.make ofs ' ') name
       (Misc.pp_span ~factor:(Float.of_int bench))
       elapsed
   in

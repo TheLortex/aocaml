@@ -17,17 +17,22 @@ end
 module Misc = Misc
 
 let solve ~input ~name solver pp =
-  Bench.print_timings ~bench:1 ~name ~pp_output:pp (fun () -> solver input)
+  Bench.print_timings ~ofs:2 ~bench:1 ~name ~pp_output:pp (fun () ->
+      solver input)
 
-let execute_result ~env ~stdin ~year (module S : Solution) =
-  Fmt.pr "⁙ Day %s\n" (S.day |> string_of_int |> C.green |> C.bold);
-  Eio.Switch.run @@ fun sw ->
-  let+ input =
-    match stdin with
-    | false -> Storage.get_input ~sw ~env ~year ~day:S.day Input
-    | true -> Ok (Eio.Stdenv.stdin env)
-  in
-  let input = Eio.Buf_read.of_flow input ~max_size:16000 in
+let extract_example ~env ~sw ~year ~day =
+  let* content = Storage.get_input ~sw ~env ~year ~day Page in
+  let input = Eio.Buf_read.of_flow content ~max_size:16000 in
+  let page = Eio.Buf_read.take_all input in
+  let open Astring in
+  match String.cut ~sep:"<pre><code>" page with
+  | None -> Error (`Msg "failed to extract example (1)")
+  | Some (_, a) -> (
+      match String.cut ~sep:"</code></pre>" a with
+      | None -> Error (`Msg "failed to extract example (2)")
+      | Some (example, _) -> Ok example)
+
+let solve (module S : Solution) input =
   let parsed_input =
     Bench.print_timings ~name:"read input" (fun () -> S.parse_input input)
   in
@@ -35,6 +40,26 @@ let execute_result ~env ~stdin ~year (module S : Solution) =
   |> List.iter (fun x ->
          solve ~name:(S.pp_key x) ~input:parsed_input (S.eval x) S.format
          |> ignore)
+
+let execute_result ~env ~stdin ~year (module S : Solution) =
+  Fmt.pr "⁙ Day %s\n" (S.day |> string_of_int |> C.green |> C.bold);
+  if stdin then
+    Ok
+      (solve
+         (module S)
+         (Eio.Stdenv.stdin env |> Eio.Buf_read.of_flow ~max_size:16000))
+  else (
+    Fmt.pr "\n⁙ Example\n";
+    let* () =
+      Eio.Switch.run (fun sw ->
+          let+ example = extract_example ~env ~sw ~year ~day:S.day in
+          solve (module S) (Eio.Buf_read.of_string example))
+    in
+    Fmt.pr "\n⁙ Input\n";
+    Eio.Switch.run @@ fun sw ->
+    let+ input = Storage.get_input ~sw ~env ~year ~day:S.day Input in
+    let input = Eio.Buf_read.of_flow input ~max_size:16000 in
+    solve (module S) input)
 
 let execute ~env ~stdin ~year (module S : Solution) =
   match execute_result ~env ~stdin ~year (module S) with
@@ -86,5 +111,4 @@ let main ~year days =
   match (!last, !stdin) with
   | false, false -> main ~env ~stdin:false ~year days
   | true, false -> main ~env ~stdin:false ~year [ get_last days ]
-  | true, true -> main ~env ~stdin:true ~year [ get_last days ]
-  | false, true -> failwith "Cannot use stdin when executing all days."
+  | _, true -> main ~env ~stdin:true ~year [ get_last days ]
