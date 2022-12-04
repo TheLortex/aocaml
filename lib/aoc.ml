@@ -24,7 +24,7 @@ let execute_result ~env ~stdin ~year (module S : Solution) =
   Eio.Switch.run @@ fun sw ->
   let+ input =
     match stdin with
-    | false -> Storage.get_input ~sw ~env ~year ~day:S.day ()
+    | false -> Storage.get_input ~sw ~env ~year ~day:S.day Input
     | true -> Ok (Eio.Stdenv.stdin env)
   in
   let input = Eio.Buf_read.of_flow input ~max_size:16000 in
