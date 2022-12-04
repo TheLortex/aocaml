@@ -1,4 +1,3 @@
-include Aoc.Misc.DefaultIntSolution
 open Eio
 
 type t = int list list
@@ -24,5 +23,3 @@ let part_2 input =
   |> function
   | a :: b :: c :: _ -> a + b + c
   | _ -> failwith "uh"
-
-let eval = function P1 -> part_1 | P2 -> part_2

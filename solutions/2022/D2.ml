@@ -1,4 +1,3 @@
-include Aoc.Misc.DefaultIntSolution
 open Eio
 
 type action = Rock | Paper | Scissors
@@ -47,4 +46,3 @@ let score (other, target) =
   score (other, mine)
 
 let part_2 input = List.map score input |> List.fold_left ( + ) 0
-let eval = function P1 -> part_1 | P2 -> part_2
