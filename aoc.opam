@@ -9,6 +9,22 @@ license: "MT"
 homepage: ""
 bug-reports: ""
 dev-repo: ""
-depends: [ "ocaml" "uuseg" "dune" "fmt" "bos" "fpath" "cohttp" "cohttp-lwt-unix" "logs" "mtime" ]
+depends: [
+  "ocaml"
+  "uuseg"
+  "dune"
+  "fmt"
+  "bos"
+  "fpath"
+  "cohttp"
+  "cohttp-eio"
+  "tls-eio"
+  "uri"
+  "mirage-crypto-rng-eio"
+  "eio"
+  "eio_main"
+  "logs"
+  "mtime"
+]
 build: []
 install: []
