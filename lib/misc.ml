@@ -73,3 +73,15 @@ module DefaultIntSolution = struct
 
   let format fmt = Fmt.pf fmt "%d"
 end
+
+module DefaultStringSolution = struct
+  type solution = string
+
+  type key = P1 | P2
+
+  let keys = [ P1; P2 ]
+
+  let pp_key = function P1 -> "part 1" | P2 -> "part 2"
+
+  let format fmt = Fmt.pf fmt "%s"
+end
