@@ -3,12 +3,18 @@ let ( let+ ) = Rresult.( >>| )
 
 module type Solution = sig
   type t
+  type key
+  type solution
 
+  val pp_key : key -> string
+  val keys : key list
   val day : int
   val parse_input : Eio.Buf_read.t -> t
-  val part_1 : t -> int
-  val part_2 : t -> int
+  val eval : key -> t -> solution
+  val format : solution Fmt.t
 end
+
+module Misc = Misc
 
 let solve ~input ~name solver pp =
   Bench.print_timings ~ofs:2 ~bench:1 ~name ~pp_output:pp (fun () ->
@@ -30,8 +36,10 @@ let solve (module S : Solution) input =
   let parsed_input =
     Bench.print_timings ~name:"read input" (fun () -> S.parse_input input)
   in
-  solve ~name:"part 1" ~input:parsed_input S.part_1 Fmt.int |> ignore;
-  solve ~name:"part 2" ~input:parsed_input S.part_2 Fmt.int |> ignore
+  S.keys
+  |> List.iter (fun x ->
+         solve ~name:(S.pp_key x) ~input:parsed_input (S.eval x) S.format
+         |> ignore)
 
 let execute_result ~env ~stdin ~year (module S : Solution) =
   Fmt.pr "⁙ Day %s\n" (S.day |> string_of_int |> C.green |> C.bold);

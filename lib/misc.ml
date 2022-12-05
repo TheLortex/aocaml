@@ -61,3 +61,15 @@ let pp_float_s ppf span =
     else Format.fprintf ppf "%da%dd" y (abs d)
 
 let pp_span ?(factor = 1.) ppf s = pp_float_s ppf (to_s s /. factor)
+
+module DefaultIntSolution = struct
+  type solution = int
+
+  type key = P1 | P2
+
+  let keys = [ P1; P2 ]
+
+  let pp_key = function P1 -> "part 1" | P2 -> "part 2"
+
+  let format fmt = Fmt.pf fmt "%d"
+end

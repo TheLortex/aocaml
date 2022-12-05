@@ -1,3 +1,4 @@
+include Aoc.Misc.DefaultIntSolution
 open Eio
 
 let priority = function
@@ -45,3 +46,4 @@ let rec loop total = function
   | _ -> failwith ""
 
 let part_2 input = loop 0 input
+let eval = function P1 -> part_1 | P2 -> part_2
