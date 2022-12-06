@@ -2,6 +2,7 @@ open Eio
 include Aoc.Misc.DefaultStringSolution
 
 let day = 5
+let ( >< ) a b = (a, b)
 
 module State = struct
   type tower = char list
@@ -17,16 +18,20 @@ module State = struct
     done;
     List.rev !lst
 
+  let ( >< ) a b = (a, b)
+  let ( +!! ) f1 f2 a b = f1 (f2 a b)
+  let ( let<> ) a f = List.iter f a
+  let ( let<>> ) a f = List.iteri (f +!! ( >< )) a
+  let ( let<+> ) a f = Option.iter f a
+
   let transpose lines =
     let towers = Array.make (List.length (List.hd lines)) [] in
-    List.rev lines
-    |> List.iter (fun line ->
-           List.iteri
-             (fun i item ->
-               match item with
-               | None -> ()
-               | Some c -> towers.(i) <- c :: towers.(i))
-             line);
+    let () =
+      let<> line = List.rev lines in
+      let<>> i, item = line in
+      let<+> c = item in
+      towers.(i) <- c :: towers.(i)
+    in
     towers
 
   let parse input =
@@ -89,7 +94,7 @@ let part_1 (state, instructions) =
   Array.map List.hd state.towers |> Array.to_seq |> String.of_seq
 
 let partitioni t spl =
-  List.mapi (fun i v -> (i, v)) t
+  List.mapi ( >< ) t
   |> List.partition_map (fun (i, v) ->
          if i < spl then Either.Left v else Right v)
 
