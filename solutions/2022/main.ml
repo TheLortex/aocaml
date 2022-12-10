@@ -7,4 +7,8 @@ let () =
       (module D4);
       (module D5);
       (module D6);
+      (module D7);
+      (module D8);
+      (module D9);
+      (module D10);
     ]
