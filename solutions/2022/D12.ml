@@ -33,13 +33,6 @@ let parse_input input =
     lines;
   { map = array; start = Option.get !start; stop = Option.get !stop }
 
-module Positions = Set.Make (struct
-  type t = int * int
-
-  let compare (a0, a1) (b0, b1) =
-    match Int.compare a0 b0 with 0 -> Int.compare a1 b1 | v -> v
-end)
-
 let deltas = List.to_seq [ (0, 1); (1, 0); (-1, 0); (0, -1) ]
 let neighbors (a, b) = Seq.map (fun (da, db) -> (a + da, b + db)) deltas
 
