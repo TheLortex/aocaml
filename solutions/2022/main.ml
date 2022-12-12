@@ -12,4 +12,5 @@ let () =
       (module D9);
       (module D10);
       (module D11);
+      (module D12);
     ]
