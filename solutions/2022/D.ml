@@ -1,3 +1,4 @@
+open Eio
 include Aoc.Misc.DefaultIntSolution
 
 let day = 0
