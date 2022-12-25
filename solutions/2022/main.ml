@@ -23,4 +23,7 @@ let () =
       (module D20);
       (module D21);
       (module D22);
+      (module D23);
+      (module D24);
+      (module D25);
     ]
