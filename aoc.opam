@@ -24,7 +24,7 @@ depends: [
   "eio"
   "eio_main"
   "logs"
-  "mtime"
+  "mtime" {< "2.0.0"}
 ]
 build: []
 install: []
