@@ -17,7 +17,7 @@ depends: [
   "bos"
   "fpath"
   "cohttp"
-  "cohttp-eio"
+  "cohttp-eio" {< "6.0.0~alpha1"}
   "tls-eio"
   "uri"
   "mirage-crypto-rng-eio"
